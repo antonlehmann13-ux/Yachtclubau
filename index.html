@@ -414,6 +414,60 @@
       .steps { gap: 0; }
       .step span:not(.step-num) { display: none; }
       .step-line { max-width: 30px; margin: 0 0.5rem; }
+
+      .form-wrap {
+        padding: 2rem 5vw 8rem;
+      }
+
+      .form-nav {
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        background: rgba(13,31,60,0.98);
+        backdrop-filter: blur(12px);
+        border-top: 1px solid var(--border);
+        padding: 1rem 5vw;
+        margin: 0;
+        z-index: 50;
+        gap: 0.8rem;
+      }
+
+      .btn-primary {
+        flex: 1;
+        text-align: center;
+        padding: 14px 16px;
+      }
+
+      .btn-back {
+        padding: 14px 16px;
+        min-width: 90px;
+      }
+
+      .progress-text {
+        font-size: 0.65rem;
+        white-space: nowrap;
+      }
+
+      .page-footer {
+        padding-bottom: 6rem;
+      }
+
+      .chip-group {
+        gap: 0.5rem;
+      }
+
+      .chip label {
+        padding: 8px 14px;
+        font-size: 0.75rem;
+      }
+
+      textarea {
+        min-height: 100px;
+      }
+
+      .rating-group label {
+        width: 52px;
+        height: 52px;
+      }
     }
   </style>
 
@@ -457,7 +511,7 @@
   </div>
 </div>
 
-<form id="surveyForm" action="https://formspree.io/f/mkoqpklq" method="POST">
+<form id="surveyForm" action="https://formspree.io/f/mkoqpklq" method="POST" novalidate>
 
   <!-- STEP 1: Personal -->
   <div class="form-section active" id="step1">
@@ -769,16 +823,17 @@
         }
       }
 
-      console.log('Sending to Formspree:', payload);
+      // Build a fresh FormData from payload for reliable Formspree submission
+      const sendData = new FormData();
+      for (let key in payload) {
+        sendData.append(key, payload[key]);
+      }
 
       try {
         const response = await fetch('https://formspree.io/f/mkoqpklq', {
           method: 'POST',
-          body: JSON.stringify(payload),
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
+          body: sendData,
+          headers: { 'Accept': 'application/json' }
         });
 
         const json = await response.json();
@@ -792,7 +847,7 @@
         } else {
           submitBtn.disabled = false;
           submitBtn.textContent = 'Absenden ✓';
-          alert('Fehler: ' + JSON.stringify(json.errors || json));
+          alert('Fehler von Formspree: ' + JSON.stringify(json.errors || json));
         }
       } catch (err) {
         submitBtn.disabled = false;
