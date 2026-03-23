@@ -305,12 +305,34 @@
 
     /* ─── NAV BUTTONS ─── */
     .form-nav {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-top: 3rem;
-      padding-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
       border-top: 1px solid var(--border);
+      gap: 0.8rem;
     }
 
+    .btn-next {
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      padding: 10px 24px;
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .btn-next:hover { background: #d4b87a; transform: translateY(-1px); }
+    .btn-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    /* keep .btn-primary for success screen reset button */
     .btn-primary {
       background: var(--gold);
       color: var(--navy);
@@ -326,28 +348,32 @@
       transition: background 0.2s, transform 0.15s;
     }
     .btn-primary:hover { background: #d4b87a; transform: translateY(-1px); }
-    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
     .btn-back {
       background: transparent;
       border: 1px solid var(--border);
       color: var(--muted);
-      padding: 14px 28px;
+      padding: 10px 16px;
       font-family: var(--font-body);
-      font-size: 0.78rem;
-      letter-spacing: 0.12em;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       border-radius: 2px;
       cursor: pointer;
       transition: border-color 0.2s, color 0.2s;
+      white-space: nowrap;
     }
     .btn-back:hover { border-color: var(--muted); color: var(--white); }
 
     .progress-text {
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
       color: var(--muted);
+      flex: 1;
+      text-align: center;
     }
+
+    
 
     /* ─── SUCCESS ─── */
     .success-screen {
@@ -414,84 +440,9 @@
       .steps { gap: 0; }
       .step span:not(.step-num) { display: none; }
       .step-line { max-width: 30px; margin: 0 0.5rem; }
-
-      .form-wrap {
-        padding: 2rem 5vw 7rem;
-      }
-
-      /* Fixed bottom nav bar */
-      .form-nav {
-        position: fixed;
-        bottom: 0; left: 0; right: 0;
-        background: rgba(13,31,60,0.97);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-top: 1px solid var(--border);
-        padding: 0.75rem 4vw;
-        margin: 0;
-        z-index: 50;
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-      }
-
-      .btn-back {
-        padding: 10px 14px;
-        font-size: 0.7rem;
-        letter-spacing: 0.1em;
-        flex-shrink: 0;
-        height: 44px;
-      }
-
-      .btn-primary {
-        padding: 10px 16px;
-        font-size: 0.7rem;
-        letter-spacing: 0.1em;
-        flex: 1;
-        text-align: center;
-        height: 44px;
-      }
-
-      .progress-text {
-        font-size: 0.62rem;
-        letter-spacing: 0.08em;
-        flex: 1;
-        text-align: center;
-        white-space: nowrap;
-        color: var(--muted);
-      }
-
-      .page-footer {
-        padding-bottom: 5rem;
-      }
-
-      .chip-group {
-        gap: 0.5rem;
-      }
-
-      .chip label {
-        padding: 8px 14px;
-        font-size: 0.75rem;
-      }
-
-      textarea {
-        min-height: 90px;
-        font-size: 0.9rem;
-      }
-
-      .rating-group {
-        gap: 0.4rem;
-      }
-
-      .rating-group label {
-        width: 48px;
-        height: 48px;
-        font-size: 0.9rem;
-      }
-
-      h2, .hero-strip h1 {
-        font-size: 2rem;
-      }
+      .form-wrap { padding-bottom: 3rem; }
+      .chip label { padding: 8px 14px; font-size: 0.75rem; }
+      textarea { min-height: 90px; }
     }
   </style>
 
@@ -591,8 +542,8 @@
     </div>
 
     <div class="form-nav">
-      <span class="progress-text">Schritt 1 von 3</span>
-      <button type="button" class="btn-primary" onclick="goTo(2)">Weiter →</button>
+      <span class="progress-text">1 / 3</span>
+      <button type="button" class="btn-next" onclick="goTo(2)">Weiter →</button>
     </div>
   </div>
 
@@ -662,8 +613,8 @@
 
     <div class="form-nav">
       <button type="button" class="btn-back" onclick="goTo(1)">← Zurück</button>
-      <span class="progress-text">Schritt 2 von 3</span>
-      <button type="button" class="btn-primary" onclick="goTo(3)">Weiter →</button>
+      <span class="progress-text">2 / 3</span>
+      <button type="button" class="btn-next" onclick="goTo(3)">Weiter →</button>
     </div>
   </div>
 
@@ -771,7 +722,7 @@
     <div class="form-nav">
       <button type="button" class="btn-back" onclick="goTo(2)">← Zurück</button>
       <span class="progress-text">Schritt 3 von 3</span>
-      <button type="submit" class="btn-primary" id="submitBtn">Absenden ✓</button>
+      <button type="submit" class="btn-next" id="submitBtn">Absenden ✓</button>
     </div>
   </div>
 
