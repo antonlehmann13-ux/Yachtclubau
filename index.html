@@ -223,12 +223,12 @@
   <div class="form-section active" id="step1">
     <div class="input-row">
       <div class="field-group">
-        <label for="firstName">Vorname</label>
-        <input type="text" id="firstName" name="firstName" placeholder="Max" autocomplete="given-name">
+        <label for="firstName">Vorname <span style="color:#e05a5a;margin-left:2px;">*</span></label>
+        <input type="text" id="firstName" name="firstName" placeholder="Max" autocomplete="given-name" required>
       </div>
       <div class="field-group">
-        <label for="lastName">Nachname</label>
-        <input type="text" id="lastName" name="lastName" placeholder="Muster" autocomplete="family-name">
+        <label for="lastName">Nachname <span style="color:#e05a5a;margin-left:2px;">*</span></label>
+        <input type="text" id="lastName" name="lastName" placeholder="Muster" autocomplete="family-name" required>
       </div>
     </div>
     <div class="field-group">
@@ -294,7 +294,7 @@
     Als Angemeldete/r erhalten Sie vor Ort eine <strong style="color:var(--gold)">offerierte Wurst vom Grill</strong> — Ihren persönlichen Voucher erhalten Sie noch per E-Mail.
   </p>
   <div class="voucher-box">
-    <div class="voucher-icon">🌭</div>
+    <div class="voucher-icon">🍖</div>
     <div class="voucher-title">Gratis Wurst vom Grill</div>
     <div class="voucher-text">Gültig am 13. Juni 2026 · Kutterwiese Au<br>Voucher wird per E-Mail zugestellt</div>
   </div>
@@ -309,13 +309,33 @@
   </footer>
 
   <script>
-    const icsData = atob("QkVHSU46VkNBTEVOREFSClZFUlNJT046Mi4wClBST0RJRDotLy9ZYWNodCBDbHViIEF1Ly9UYWcgZGVyIG9mZmVuZW4gVHVlci8vREUKQkVHSU46VkVWRU5UCkRUU1RBUlQ6MjAyNjA2MTNUMTAwMDAwCkRURU5EOjIwMjYwNjEzVDE3MDAwMApTVU1NQVJZOlRhZyBkZXIgb2ZmZW5lbiBUw7xyIOKAkyBZYWNodCBDbHViIEF1CkRFU0NSSVBUSU9OOldpbGxrb21tZW4gYW0gVGFnIGRlciBvZmZlbmVuIFTDvHIgZGVzIFlhY2h0IENsdWIgQXUgYW4gZGVyIEt1dHRlcndpZXNlLiBHcmF0aXMgV3Vyc3Qgdm9tIEdyaWxsIGbDvHIgQW5nZW1lbGRldGUhCkxPQ0FUSU9OOkt1dHRlcndpZXNlXCwgQXVcLCA4ODA0IEF1IFpIXCwgU2Nod2VpegpTVEFUVVM6Q09ORklSTUVECkVORDpWRVZFTlQKRU5EOlZDQUxFTkRBUg==");
+    const icsData = atob("QkVHSU46VkNBTEVOREFSClZFUlNJT046Mi4wClBST0RJRDotLy9ZYWNodCBDbHViIEF1Ly9UYWcgZGVyIG9mZmVuZW4gVHVlci8vREUKQkVHSU46VkVWRU5UCkRUU1RBUlQ6MjAyNjA2MTNUMTQwMDAwCkRURU5EOjIwMjYwNjEzVDE4MDAwMApTVU1NQVJZOllDQVUgVGFnIGRlciBPZmZlbmVuIFTDvHIKTE9DQVRJT046S3V0dGVyd2llc2VcLCBBdVwsIDg4MDQgQXUgWkhcLCBTY2h3ZWl6ClNUQVRVUzpDT05GSVJNRUQKRU5EOlZFVkVOVApFTkQ6VkNBTEVOREFS");
     const blob = new Blob([icsData], {type: 'text/calendar'});
     document.getElementById('calBtn').href = URL.createObjectURL(blob);
 
     let currentStep = 1;
 
     function goTo(step) {
+      // Validate required fields before proceeding
+      if (step > currentStep) {
+        const required = document.querySelectorAll('#step' + currentStep + ' [required]');
+        let valid = true;
+        required.forEach(field => {
+          field.style.borderColor = '';
+          if (!field.value.trim()) {
+            field.style.borderColor = '#e05a5a';
+            valid = false;
+          } else if (field.type === 'email' && !field.value.includes('@')) {
+            field.style.borderColor = '#e05a5a';
+            valid = false;
+          }
+        });
+        if (!valid) {
+          const first = document.querySelector('#step' + currentStep + ' [required]:placeholder-shown, #step' + currentStep + ' [required][style*="e05a5a"]');
+          if (first) first.focus();
+          return;
+        }
+      }
       document.getElementById('step' + currentStep).classList.remove('active');
       document.getElementById('stepDot' + currentStep).classList.remove('active');
       document.getElementById('stepDot' + currentStep).classList.add('done');
