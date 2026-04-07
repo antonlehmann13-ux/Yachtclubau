@@ -8,6 +8,8 @@
   <meta name="robots" content="noindex">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init("CgICUtR42NI00xLrq");</script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -373,6 +375,13 @@
         });
         const json = await res.json();
         if (res.ok) {
+          // Send confirmation email via EmailJS
+          emailjs.send('service_0s9nar2', 'template_ld4v6ae', {
+            firstName: payload.firstName || '',
+            lastName:  payload.lastName  || '',
+            email:     payload.email     || ''
+          }).catch(err => console.warn('EmailJS error:', err));
+
           document.getElementById('step' + currentStep).classList.remove('active');
           document.getElementById('stepIndicator').style.display = 'none';
           document.getElementById('successScreen').classList.add('active');
